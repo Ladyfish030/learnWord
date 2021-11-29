@@ -44,7 +44,7 @@
           {{ en }}
         </div>
         <div>
-          <label
+          <label :class="[cnIndex == 0 ? 'greenCn' : '']"
             ><input
               name="ans"
               type="radio"
@@ -52,7 +52,7 @@
               v-model="cnAnsU"
             />{{ cnAns[0] }}
           </label>
-          <label
+          <label :class="[cnIndex == 1 ? 'greenCn' : '']"
             ><input
               name="ans"
               type="radio"
@@ -60,7 +60,7 @@
               v-model="cnAnsU"
             />{{ cnAns[1] }}
           </label>
-          <label
+          <label :class="[cnIndex == 2 ? 'greenCn' : '']"
             ><input
               name="ans"
               type="radio"
@@ -68,7 +68,7 @@
               v-model="cnAnsU"
             />{{ cnAns[2] }}
           </label>
-          <label
+          <label :class="[cnIndex == 3 ? 'greenCn' : '']"
             ><input
               name="ans"
               type="radio"
@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       wordList: [
-        { cn: '1', en: '1a' },
+        { cn: 'n. 单词', en: 'word' },
         { cn: '2', en: 'ba' },
         { cn: '3', en: 'ca' },
         { cn: '4', en: 'da' },
@@ -114,6 +114,7 @@ export default {
       btnTxt: '确定',
       testType: 1,
       cnAnsU: '',
+      cnIndex: 5,
     }
   },
   computed: {
@@ -166,9 +167,38 @@ export default {
       }
     },
     submit2() {
-      if (this.cnAnsU == this.cnAns) {
+      if (this.statue == 'waiting') {
+        for (let i = 0; i < 4; i++) {
+          if (this.cnAns[i] == this.cn) {
+            this.cnIndex = i
+          }
+        }
+        this.statue = 'true'
+        this.btnTxt = '下一个'
+      } else {
+        this.cnIndex = 5
+        this.cnAnsU = ''
+        this.index += 1
+        if (this.index > this.len - 1) {
+          this.testType = 3
+          axios({
+            method: 'post',
+            url: 'http://47.113.186.74/api/done.html',
+            headers: {
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+              // 'Content-Type': 'application/raw',
+              'Content-Type': 'text/plain',
+            },
+            data: {
+              username: 'user20',
+            },
+          }).then((res) => {
+            console.log(res)
+          })
+        }
+        this.btnTxt = '确定'
+        this.statue = 'waiting'
       }
-      this.index += 1
     },
   },
   mounted() {
@@ -187,7 +217,7 @@ export default {
         'Content-Type': 'text/plain',
       },
       data: {
-        userid: '2',
+        username: 'user20',
       },
     }).then(function (res) {
       that.wordList = eval(res.data)
@@ -289,5 +319,8 @@ label {
   margin: 0 auto;
   margin-bottom: 5vh;
   display: block;
+}
+.greenCn {
+  color: rgb(110, 209, 156);
 }
 </style>

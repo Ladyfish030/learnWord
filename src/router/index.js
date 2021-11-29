@@ -6,12 +6,12 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/w',
     name: 'Word',
     component: () => import(/* webpackChunkName: "word" */ '../views/Word.vue'),
   },
   {
-    path: '/my',
+    path: '/',
     name: 'my',
     component: () => import(/* webpackChunkName: "my" */ '../views/My.vue'),
   },

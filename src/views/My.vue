@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'My',
   data() {
@@ -61,6 +62,21 @@ export default {
   methods: {
     setNum() {
       localStorage.setItem('num', this.num)
+      axios({
+        method: 'post',
+        url: 'http://47.113.186.74/api/change_plan.html',
+        headers: {
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+          // 'Content-Type': 'application/raw',
+          'Content-Type': 'text/plain',
+        },
+        data: {
+          username: 'user20',
+          plan: this.num,
+        },
+      }).then(function (res) {
+        console.log(res)
+      })
     },
     changeType(v) {
       localStorage.setItem('type', v)
