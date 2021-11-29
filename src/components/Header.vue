@@ -14,8 +14,8 @@
                 <img src="../static/icons/down.png" />
             </div>
             <div class="menu" v-if="showMenu">
-                <!-- <div class="menu-item" @click="userAction">{{user.username?'退出登录':'登录'}}</div> -->
-                <div class="menu-item" @click="userProfile">{{user.username?'个人主页':''}}</div>
+                <div class="menu-item" @click="userAction">{{user.username?'退出登录':'登录'}}</div>
+                <div class="menu-item" v-if="user.username" @click="userProfile">个人主页</div>
             </div>
         </div>
     </div>
@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     goHome () {
-      // if not home page then go home
       return this.$route.path === '/home' || this.$router.replace('/home')
     },
     userAction () {
@@ -44,6 +43,7 @@ export default {
         if (confirm('确认退出登录？')) {
           this.$store.commit('logout')
           this.showMenu = false
+          this.$router.replace('/home')
         }
       } else {
         this.$event.emit('login')
@@ -52,6 +52,7 @@ export default {
     },
     userProfile(){
       this.$router.push('/profile')
+      this.showMenu = false
     }
     
   }
@@ -129,7 +130,9 @@ export default {
 
 .menu {
   position: absolute;
-  width: 180px;
+  display: flex;
+  flex-direction: column;
+  width: 120px;
   right: 0;
   top: 80px;
   box-shadow: -2px -2px 6px -2px rgba(0, 0, 0, .12);
@@ -143,15 +146,15 @@ export default {
 }
 
 .menu-item {
-  position: absolute;
+  /* position: absolute; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #FFFFFF;
   width: 100%;
   height: 40px;
   cursor: pointer;
   color: #2d3639;
-  display: flex;
-  align-items: center;
-  padding-left: 15px;
   box-sizing: border-box;
   font-size: 15px;
   font-weight: 600;

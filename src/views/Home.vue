@@ -19,7 +19,11 @@ export default {
     Login
   },
   mounted () {
-    this.$event.on('login', this, () => { this.showLogin = true })
+    console.log(this.user.uaername);
+    this.showLogin = this.user.uaername?false:true
+    console.log(this.showLogin);
+    // this.$event.on('login', this, () => { this.showLogin = true })
+    // console.log(this.showLogin);
   },
   data () {
     return {
@@ -36,15 +40,14 @@ export default {
       window.location.href = 'https://github.com/Ladyfish030/learnWord'
     },
     start(){
+      console.log(this.user.uaername);
       if (this.user.username){
         this.$router.push('/learn')
       }
       else{
-        showLogin=true
+        this.showLogin = true
       }
     }
-    
-    
   }
 }
 </script>
@@ -67,21 +70,26 @@ export default {
   margin: 0 auto;
 }
 
+img{
+  width: 150px;
+  height: 150px;
+}
+
 .header {
   width: 100%;
   color: #40BC96;
   text-align: center;
-  font-size: 42px;
-  letter-spacing: 3px;
+  font-size: 36px;
+  letter-spacing: 2px;
   font-weight: bold;
-  margin-top: 40px;
-  margin-bottom: 80px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 .start {
   width: 240px;
   height: 64px;
-  margin: 100px auto 0 auto;
+  margin: 50px auto 0 auto;
   background: #3CCFCF;
   color: #FFFFFF;
   display: flex;

@@ -1,19 +1,26 @@
 <template>
   <div class="background">
     <div class="login">
-      <div class="login-title">
-        <span>登录/注册</span>
+      <div class="header">
+        <div class="title">
+          <span :class="log" @click="isLogin">登录</span>
+          <span>|</span>
+          <span :class="reg" @click="isReg">注册</span>
+        </div>
         <img @click="close" src="../static/icons/close.png" />
       </div>
-      <div class="login-main">
-        <input v-model="username" placeholder="请输入用户名" spellcheck="false" type="text" />
-        <div class="login-line" />
+      <div class="main">
+        <input v-model="username" placeholder="至少4位用户名" spellcheck="false" type="text" />
+        <div class="line" />
         <span>用户名</span>
-        <input v-model="password" placeholder="请输入密码" type="password" />
-        <div class="login-line" />
+        <input v-model="password" placeholder="至少6位密码" type="password" />
+        <div class="line" />
         <span>密码</span>
-        <div class="login-button" @click="login">登录</div>
-        <div class="login-hint">未注册用户将会自动注册为新用户</div>
+        <input v-model="passwordAgain" v-if="reg=='selected'" placeholder="再重复一遍密码" type="password" />
+        <div class="line" v-if="reg=='selected'" />
+        <span v-if="reg=='selected'">重复密码</span>
+        <div class="button" v-if="log=='selected'" @click="login">登录</div>
+        <div class="button" v-if="reg=='selected'" @click="register">注册</div>
       </div>
     </div>
   </div>
@@ -24,11 +31,22 @@
     name: 'Login',
     data() {
       return {
+        log: 'selected',
+        reg: 'unSelected',
         username: '',
-        password: ''
+        password: '',
+        passwordAgain: ''
       }
     },
     methods: {
+      isLogin() {
+        this.reg = 'unSelected'
+        this.log = 'selected'
+      },
+      isReg() {
+        this.log = 'unSelected'
+        this.reg = 'selected'
+      },
       close() {
         this.$emit('close')
       },
@@ -39,11 +57,9 @@
         if (!password) return alert('请填写密码')
         if (username.length < 4) return alert('用户名至少需要4位')
         if (password.length < 6) return alert('密码至少需要6位')
-        
         this.$axios({
           url: '/api/login.html',
           headers: {
-            // 'Content-Type': 'application/json',
             'Content-Type': 'text/plain'
           },
           method: 'post',
@@ -53,38 +69,57 @@
           }
         }).then(
           (res) => {
-            console.log('@获取返回信息', res);
-            console.log('@登录的用户名',res.data[0].username);
-            if (res.data[0].ret == 1){
-              this.$axios({
-                url: '/api/reg.html',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                method: 'post',
-                data: {
-                  username,
-                  password,
-                  plan: 200
-                }
-              }).then(
-                (res) => {
-                  console.log('@返回获取msg信息', res);
-                }
-              );
-            }
-            else{
+            console.log("@获取返回信息", res.data);
+            if (res.data[0].ret == 1) {
+              console.log("登陆失败");
+              alert("用户名或密码错误")
+            } else {
               console.log("登陆成功");
               this.$store.commit('setUser', res.data[0])
               this.close()
             }
-          })
+          }
+        )
+      },
+      register() {
+        const username = this.username
+        const password = this.password
+        const passwordAgain = this.passwordAgain
+        if (!username) return alert('请填写用户名')
+        if (!password || !passwordAgain) return alert('请填写密码')
+        if (username.length < 4) return alert('用户名至少需要4位')
+        if (password.length < 6) return alert('密码至少需要6位')
+        if (password !== passwordAgain) return alert('前后密码不一致')
+        this.$axios({
+          url: '/api/reg.html',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'post',
+          data: {
+            username,
+            password,
+            plan: 50
+          }
+        }).then(
+          (res) => {
+            console.log("@获取返回信息", res.data);
+            if (res.data[0].ret == 1) {
+              console.log("注册失败");
+              alert("用户名或密码错误")
+            } else {
+              console.log("注册成功");
+              this.$store.commit('setUser', res.data[0])
+              this.close()
+            }
+          }
+        )
       }
     }
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .background {
     position: absolute;
     top: 0;
@@ -96,100 +131,108 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-  }
 
-  .login {
-    width: 600px;
-    height: fit-content;
-  }
+    .login {
+      width: 80vw;
+      max-width: 500px;
+      height: fit-content;
 
-  .login-title {
-    width: 100%;
-    background: #40BC96;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 35px;
-    box-sizing: border-box;
-  }
+      .header {
+        width: 100%;
+        background: #40BC96;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 35px;
+        box-sizing: border-box;
 
-  .login-title span {
-    font-size: 30px;
-    color: #FFFFFF;
-    font-weight: 700;
-  }
+        .title {
+          display: flex;
+          justify-content: center;
+          align-items: center;
 
-  .login-title img {
-    height: 38px;
-    width: 38px;
-    cursor: pointer;
-  }
+          span {
+            font-size: 28px;
+            color: #FFFFFF;
+            font-weight: 700;
+            letter-spacing: 3px;
+          }
 
-  .login-main {
-    width: 100%;
-    background: #FFFFFF;
-    display: flex;
-    flex-direction: column;
-    padding: 35px 35px 25px 35px;
-    box-sizing: border-box;
-  }
+          .log {
+            color: #F9CC28;
+          }
 
-  .login-main input {
-    width: 100%;
-    height: 32px;
-    border: none;
-    box-shadow: none;
-    outline: none;
-    font-size: 18px;
-  }
+          .selected {
+            color: #F9CC28;
+          }
+        }
 
-  .login-main input::-webkit-input-placeholder {
-    color: #C1CACE;
-  }
+        img {
+          height: 28px;
+          width: 28px;
+          cursor: pointer;
+        }
+      }
 
-  .login-main span {
-    width: 100%;
-    color: #97a5aa;
-    font-weight: 600;
-    font-size: 12px;
-    margin-bottom: 25px;
-    text-align: left;
-  }
+      .main {
+        width: 100%;
+        background: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        padding: 35px 35px 25px 35px;
+        box-sizing: border-box;
 
-  .login-line {
-    width: 100%;
-    height: 3px;
-    background: #455358;
-    margin-top: 2px;
-    margin-bottom: 6px;
-  }
+        input {
+          width: 100%;
+          height: 32px;
+          border: none;
+          box-shadow: none;
+          outline: none;
+          font-size: 18px;
 
-  .login-button {
-    width: 100%;
-    height: 70px;
-    background: #3CCFCF;
-    color: #FFFFFF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 17px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.5s ease;
-  }
+          &::-webkit-input-placeholder {
+            color: #C1CACE;
+          }
+        }
 
-  .login-button:hover {
-    background: #F9CC28;
-    color: #455358;
-  }
+        span {
+          width: 100%;
+          color: #97a5aa;
+          font-weight: 600;
+          font-size: 12px;
+          margin-bottom: 25px;
+          text-align: left;
+        }
 
-  .login-hint {
-    color: #455358;
-    margin-top: 8px;
-    font-size: 13px;
-    font-weight: 400;
-    text-align: left;
+        .line {
+          width: 100%;
+          height: 3px;
+          background: #455358;
+          margin-top: 2px;
+          margin-bottom: 6px;
+        }
+
+        .button {
+          width: 100%;
+          height: 70px;
+          background: #3CCFCF;
+          color: #FFFFFF;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          font-weight: 600;
+          letter-spacing: 2px;
+          cursor: pointer;
+          transition: all 0.5s ease;
+
+          &:hover {
+            background: #F9CC28;
+            color: #455358;
+          }
+        }
+      }
+    }
   }
 </style>
