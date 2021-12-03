@@ -19,8 +19,8 @@ export default {
     Login
   },
   mounted () {
-    console.log(this.user.uaername);
-    this.showLogin = this.user.uaername?false:true
+    console.log(this.user);
+    this.showLogin = this.user?false:true
     console.log(this.showLogin);
     // this.$event.on('login', this, () => { this.showLogin = true })
     // console.log(this.showLogin);
@@ -40,8 +40,7 @@ export default {
       window.location.href = 'https://github.com/Ladyfish030/learnWord'
     },
     start(){
-      console.log(this.user.uaername);
-      if (this.user.username){
+      if (this.user){
         this.$router.push('/learn')
       }
       else{

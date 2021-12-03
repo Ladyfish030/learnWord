@@ -6,37 +6,38 @@ import Profile from '@/views/Profile.vue'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
     path: '/',
     name: 'index',
-    redirect: '/home'
+    redirect: '/home',
   },
   {
     path: '*',
     name: '404',
-    redirect: '/home'
+    redirect: '/home',
   },
   {
     path: '/home',
     name: 'home',
-    component: Home
+    component: Home,
   },
   {
     path: '/learn',
     name: 'learn',
-    component: Learn
+    component: Learn,
   },
   {
     path: '/profile',
     name: 'profile',
-    component: Profile
+    component: Profile,
   },
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
-  routes
+  routes,
 })
 
 export default router

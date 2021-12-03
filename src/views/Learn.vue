@@ -8,9 +8,15 @@
       <div class="en">
         {{ en }}
       </div>
-      <a :href="`https://dict.youdao.com/dictvoice?audio=${en}&type=2`">
-        <img src="../assets/fayinwang.png" class="mp3"
-      /></a>
+      <!-- <a :href="`https://dict.youdao.com/dictvoice?audio=${en}&type=2`"> -->
+      <img src="../assets/fayinwang.png" class="mp3" @click="mp3()" />
+      <!-- <audio controls="controls" controlsList="nodownload" class="audio">
+        <source
+          :src="`https://dict.youdao.com/dictvoice?audio=${en}&type=2`"
+          type="audio/mpeg"
+        />
+      </audio> -->
+
       <div class="cn">
         {{ cn }}
       </div>
@@ -114,6 +120,7 @@ export default {
       testType: 1,
       cnAnsU: '',
       cnIndex: 5,
+      mp3Src: null,
     }
   },
   computed: {
@@ -128,15 +135,14 @@ export default {
     },
   },
   methods: {
-    // mp3() {
-    //   axios({
-    //     method: 'get',
-    //     url: `https://dict.youdao.com/dictvoice?audio=${this.en}&type=2`,
-    //   }).then(function (res) {
-    //     console.log(res)
-    //     console.log(eval(res))
-    //   })
-    // },
+    mp3() {
+      let that = this
+      let audio = new Audio()
+      audio.src = `https://dict.youdao.com/dictvoice?audio=${that.en}&type=2`
+      console.log('fdaf')
+      audio.load()
+      audio.play()
+    },
     add() {
       this.index += 1
       if (this.index == this.len - 1) {
@@ -182,14 +188,14 @@ export default {
           this.testType = 3
           axios({
             method: 'post',
-            url: '/api/done.html',
+            url: 'http://47.113.186.74/api/done.html',
             headers: {
               // 'Content-Type': 'application/x-www-form-urlencoded',
               // 'Content-Type': 'application/raw',
               'Content-Type': 'text/plain',
             },
             data: {
-              username: 'user20',
+              username: this.$store.state.user,
             },
           }).then((res) => {
             console.log(res)
@@ -209,14 +215,14 @@ export default {
     let that = this
     axios({
       method: 'post',
-      url: '/api/get_qu.html',
+      url: 'http://47.113.186.74/api/get_qu.html',
       headers: {
         // 'Content-Type': 'application/x-www-form-urlencoded',
         // 'Content-Type': 'application/raw',
         'Content-Type': 'text/plain',
       },
       data: {
-        username: 'user20',
+        username: this.$store.state.user,
       },
     }).then(function (res) {
       that.wordList = eval(res.data)
@@ -314,10 +320,15 @@ label {
   text-align: center;
 }
 .mp3 {
-  width: 40px;
-  margin: 0 auto;
-  margin-bottom: 5vh;
-  display: block;
+  display: inline-block;
+  height: 5vh;
+
+  width: 8vw;
+}
+.audio {
+  display: inline-block;
+  height: 10vh;
+  width: 60vw;
 }
 .greenCn {
   color: rgb(110, 209, 156);

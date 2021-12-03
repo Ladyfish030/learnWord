@@ -1,47 +1,44 @@
 <template>
-    <div class="header">
-        <div class="main">
-            <div class="title" @click="goHome">CET4 2 Weeks</div>
-            <div class="user" @click="showMenu=!showMenu">
-                <template v-if="user.username">
-                    <div></div>
-                    <span>{{user.username}}</span>
-                </template>
-                <template v-else>
-                    <div></div>
-                    <span>未登录</span>
-                </template>
-                <img src="../static/icons/down.png" />
-            </div>
-            <div class="menu" v-if="showMenu">
-                <div class="menu-item" @click="userAction">{{user.username?'退出登录':'登录'}}</div>
-                <div class="menu-item" v-if="user.username" @click="userProfile">个人主页</div>
-            </div>
+  <div class="header">
+    <div class="main">
+      <div class="title" @click="goHome">CET4 2 Weeks</div>
+      <div class="user" @click="showMenu = !showMenu">
+        <template v-if="user">
+          <div></div>
+          <span>{{ user }}</span>
+        </template>
+        <template v-else>
+          <div></div>
+          <span>未登录</span>
+        </template>
+        <img src="../static/icons/down.png" />
+      </div>
+      <div class="menu" v-if="showMenu">
+        <div class="menu-item" @click="userAction">
+          {{ user ? '退出登录' : '登录' }}
         </div>
+        <div class="menu-item" v-if="user" @click="userProfile">个人主页</div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'Header',
-  data () {
+  data() {
     return {
-      showMenu: false
-    }
-  },
-  computed: {
-    user () {
-      return this.$store.state.user
+      showMenu: false,
     }
   },
   methods: {
-    goHome () {
+    goHome() {
       return this.$route.path === '/home' || this.$router.replace('/home')
     },
-    userAction () {
+    userAction() {
       if (this.user.username) {
         if (confirm('确认退出登录？')) {
-          this.$store.commit('logout')
+          localStorage.setItem('login', false)
           this.showMenu = false
           this.$router.replace('/home')
         }
@@ -50,12 +47,17 @@ export default {
         this.showMenu = false
       }
     },
-    userProfile(){
+    userProfile() {
       this.$router.push('/profile')
       this.showMenu = false
-    }
-    
-  }
+    },
+  },
+  computed: {
+    user() {
+      console.log(this.$store.state.user)
+      return this.$store.state.user
+    },
+  },
 }
 </script>
 
@@ -64,8 +66,8 @@ export default {
   position: absolute;
   top: 0;
   width: 100%;
-  background: #40BC96;
-  height: 80px;
+  background: #40bc96;
+  height: 15vh;
   z-index: 1;
 }
 
@@ -83,7 +85,7 @@ export default {
   font-size: 32px;
   font-weight: bolder;
   cursor: pointer;
-  color: #FFFFFF;
+  color: #ffffff;
   padding: 0 10px;
   box-sizing: border-box;
   font-family: Calibri, sans-serif;
@@ -111,13 +113,13 @@ export default {
   letter-spacing: 0.5px;
   font-weight: 600;
   background: #248491;
-  color: #FFFFFF;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, .24);
+  color: #ffffff;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.24);
 }
 
 .user span {
   font-size: 13px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 600;
   margin-left: 10px;
 }
@@ -135,14 +137,18 @@ export default {
   width: 120px;
   right: 0;
   top: 80px;
-  box-shadow: -2px -2px 6px -2px rgba(0, 0, 0, .12);
+  box-shadow: -2px -2px 6px -2px rgba(0, 0, 0, 0.12);
   animation: blur 0.5s;
   animation-fill-mode: both;
 }
 
 @keyframes blur {
-  0%   { opacity: 0 }
-  100% { opacity: 1 }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .menu-item {
@@ -150,7 +156,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #FFFFFF;
+  background: #ffffff;
   width: 100%;
   height: 40px;
   cursor: pointer;
@@ -163,11 +169,11 @@ export default {
 }
 
 .menu-item:hover {
-  background: #F9CC28;
+  background: #f9cc28;
 }
 
 .menu:after {
-  background: #FFFFFF;
+  background: #ffffff;
   content: '';
   position: absolute;
   right: 3px;

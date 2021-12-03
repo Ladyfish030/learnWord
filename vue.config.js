@@ -4,19 +4,20 @@ module.exports = {
   //输出文件目录
   outputDir: 'dist',
   //webpack-dev-server相关配置
-  devServer: {
-    // port: 8011,
-    host: 'localhost',
-    open: true, //配置游览器自动访问
-    proxy: {
-      '/api': {
-        target: 'http://47.113.186.74/api',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
-      }
-    }
-  }
+  // devServer: {
+  //   // port: 8011,
+  //   host: 'localhost',
+  //   open: true, //配置游览器自动访问
+  //   proxy: {
+  //     '/api': {
+  //       target: 'https://dict.youdao.com',
+  //       ws: true,
+  //       secure: false,
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         '^/api': '',
+  //       },
+  //     },
+  //   },
+  // },
 }

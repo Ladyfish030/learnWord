@@ -1,16 +1,16 @@
 <template>
-    <div id="app">
-        <Header />
-        <router-view/>
-    </div>
+  <div id="app">
+    <Header />
+    <router-view />
+  </div>
 </template>
 
 <script>
 import Header from '@/components/Header.vue'
 export default {
   components: {
-    Header
-  }
+    Header,
+  },
 }
 </script>
 
@@ -19,7 +19,7 @@ body {
   padding: 0;
   margin: 0;
   width: 100vw;
-  height: 100vh;
+  /* height: 100vh; */
 }
 
 #app {
