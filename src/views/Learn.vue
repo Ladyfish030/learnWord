@@ -1,7 +1,7 @@
 <template>
   <div class="learn">
     <div class="header">
-      <img src="../assets/arrow.png" class="backBtn" />
+      <img src="../static/icons/arrow2.png" class="backBtn" />
       单词卡片
     </div>
     <div class="wordItem" v-if="!testShow">
@@ -9,7 +9,7 @@
         {{ en }}
       </div>
       <!-- <a :href="`https://dict.youdao.com/dictvoice?audio=${en}&type=2`"> -->
-      <img src="../assets/fayinwang.png" class="mp3" @click="mp3()" />
+      <img src="../static/icons/fayinwang.png" class="mp3" @click="mp3()" />
       <!-- <audio controls="controls" controlsList="nodownload" class="audio">
         <source
           :src="`https://dict.youdao.com/dictvoice?audio=${en}&type=2`"
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="finish" v-if="testType == 3">
-      <img class="finishImg" src="../assets/提交成功.png" />
+      <img class="finishImg" src="../static/icons/提交成功.png" />
       <div class="finishTxt">测试完成，点击左上角按钮返回首页</div>
     </div>
   </div>

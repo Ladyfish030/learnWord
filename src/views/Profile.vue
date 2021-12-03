@@ -3,7 +3,7 @@
     <div class="header">
       <!-- <div class="top">个人中心</div> -->
       <div class="avater">
-        <img src="../assets/头像.png" />
+        <img src="../static/icons/头像.png" />
       </div>
       <div class="username">{{ username }}</div>
     </div>
@@ -55,10 +55,14 @@ export default {
   name: 'profile',
   data() {
     return {
-      username: 324,
       num: null,
       type: null,
     }
+  },
+  computed: {
+    username() {
+      return this.$store.state.user
+    },
   },
   methods: {
     setNum() {

@@ -36,9 +36,10 @@ export default {
       return this.$route.path === '/home' || this.$router.replace('/home')
     },
     userAction() {
-      if (this.user.username) {
+      if (this.user) {
         if (confirm('确认退出登录？')) {
-          localStorage.setItem('login', false)
+          localStorage.removeItem('user')
+          this.$store.commit('setUser', null)
           this.showMenu = false
           this.$router.replace('/home')
         }
